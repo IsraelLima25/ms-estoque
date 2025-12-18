@@ -2,14 +2,12 @@ package com.business.project.ms_estoque.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "tbl_produto")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

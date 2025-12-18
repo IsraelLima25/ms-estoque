@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public record ProdutoRequest(@NotBlank String descricao, @NotNull @Positive BigDecimal preco) {
+public record CriarProdutoRequest(@NotBlank String descricao, @NotNull @Positive BigDecimal preco) {
     public Produto toModel() {
         return new Produto(descricao, preco);
     }
