@@ -17,7 +17,6 @@ import com.business.project.ms_estoque.model.Produto;
 import com.business.project.ms_estoque.repository.ProdutoRepository;
 import com.business.project.ms_estoque.service.HistoricoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import java.util.Optional;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,9 +111,7 @@ class ProdutoControllerTest {
     @Test
     @DisplayName("Deve listar todos os produtos e retornar 200")
     void deveListarTodosProdutos() throws Exception {
-        when(produtoRepository.findAll())
-                .thenReturn(
-                        List.of(Instancio.create(Produto.class), Instancio.create(Produto.class)));
+        when(produtoRepository.findAll()).thenReturn(Instancio.createList(Produto.class));
         mockMvc.perform(get("/produtos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
