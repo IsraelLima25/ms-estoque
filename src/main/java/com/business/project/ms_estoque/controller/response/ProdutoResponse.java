@@ -1,12 +1,7 @@
 package com.business.project.ms_estoque.controller.response;
 
+import java.math.BigDecimal;
 import lombok.Builder;
 
-import java.math.BigDecimal;
-
 @Builder
-public record ProdutoResponse(
-        Long id,
-        String descricao,
-        BigDecimal preco
-) {}
+public record ProdutoResponse(Long id, String descricao, BigDecimal preco) {}

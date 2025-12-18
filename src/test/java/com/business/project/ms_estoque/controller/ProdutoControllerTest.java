@@ -1,5 +1,10 @@
 package com.business.project.ms_estoque.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import com.business.project.ms_estoque.controller.request.ProdutoRequest;
 import com.business.project.ms_estoque.exception.RestExceptionHandler;
 import com.business.project.ms_estoque.model.Produto;
@@ -17,21 +22,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @WebMvcTest
-@ContextConfiguration(classes = { ProdutoController.class, RestExceptionHandler.class })
+@ContextConfiguration(classes = {ProdutoController.class, RestExceptionHandler.class})
 @AutoConfigureJsonTesters
 class ProdutoControllerTest {
 
-    @Autowired
-    MockMvc mockMvc;
+    @Autowired MockMvc mockMvc;
 
-    @MockitoBean
-    ProdutoRepository produtoRepository;
+    @MockitoBean ProdutoRepository produtoRepository;
 
     ObjectMapper objectMapper;
 
@@ -50,9 +48,10 @@ class ProdutoControllerTest {
 
         var requestProduto = Instancio.create(ProdutoRequest.class);
 
-        mockMvc.perform(post("/produtos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestProduto)))
+        mockMvc.perform(
+                        post("/produtos")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestProduto)))
                 .andExpect(status().isCreated());
     }
 
@@ -62,9 +61,10 @@ class ProdutoControllerTest {
 
         var requestProduto = Instancio.ofBlank(ProdutoRequest.class);
 
-        mockMvc.perform(post("/produtos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestProduto)))
+        mockMvc.perform(
+                        post("/produtos")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestProduto)))
                 .andExpect(status().isBadRequest());
     }
 }

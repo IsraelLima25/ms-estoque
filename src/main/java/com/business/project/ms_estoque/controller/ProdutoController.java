@@ -20,16 +20,16 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
 
     @PostMapping
-    public ResponseEntity<ProdutoResponse> criar(@Valid @RequestBody ProdutoRequest produtoRequest,
-                                                 UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ProdutoResponse> criar(
+            @Valid @RequestBody ProdutoRequest produtoRequest, UriComponentsBuilder uriBuilder) {
+
+        String descricao =
+                "Este texto é propositalmente muito longo e ultrapaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaassa o limite de 100 caracteres configurado no google_checks.xml para provocar erro do Checkstyle";
 
         var model = produtoRepository.save(produtoRequest.toModel());
-        var response = new ProdutoResponse(
-                model.getId(),
-                model.getDescricao(),
-                model.getPreco()
-        );
-        return ResponseEntity.created(uriBuilder.path("/produtos/{id}")
-                .buildAndExpand(model.getId()).toUri()).body(response);
+        var response = new ProdutoResponse(model.getId(), model.getDescricao(), model.getPreco());
+        return ResponseEntity.created(
+                        uriBuilder.path("/produtos/{id}").buildAndExpand(model.getId()).toUri())
+                .body(response);
     }
 }
