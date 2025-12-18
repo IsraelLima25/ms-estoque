@@ -71,4 +71,20 @@ public class ProdutoController {
                         .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<ProdutoResponse> filtrarPorId(@PathVariable("id") Long id) {
+
+        Optional<Produto> possivelProduto = produtoRepository.findById(id);
+        if (possivelProduto.isPresent()) {
+            var produto = possivelProduto.get();
+            var produtoResponse =
+                    new ProdutoResponse(
+                            produto.getId(), produto.getDescricao(), produto.getPreco());
+            return ResponseEntity.ok(produtoResponse);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

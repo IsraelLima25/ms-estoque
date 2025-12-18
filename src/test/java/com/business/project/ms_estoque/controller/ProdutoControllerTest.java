@@ -113,4 +113,28 @@ class ProdutoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
     }
+
+    @Test
+    @DisplayName("Quando produto não encontrado deve retornar 404 ao filtrar por ID")
+    void naoDeveRetornarProdutoFiltradoNaoEncontrado() throws Exception {
+
+        when(produtoRepository.findById(2L)).thenReturn(Optional.empty());
+        var requestProduto = Instancio.create(AtualizarProdutoRequest.class);
+        mockMvc.perform(get("/produtos/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve filtrar produto por ID e retornar 200")
+    void deveRetornarProdutoFiltradoEncontrado() throws Exception {
+
+        var produtoModel = Instancio.create(Produto.class);
+
+        when(produtoRepository.findById(1L)).thenReturn(Optional.of(produtoModel));
+
+        var requestProduto = Instancio.create(AtualizarProdutoRequest.class);
+
+        mockMvc.perform(get("/produtos/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 }
