@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.business.project.ms_estoque.controller.enums.TipoMovimentacao;
 import com.business.project.ms_estoque.controller.request.AtualizarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.CriarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.EntradaProdutoRequest;
@@ -14,6 +15,7 @@ import com.business.project.ms_estoque.controller.request.SaidaProdutoRequest;
 import com.business.project.ms_estoque.exception.RestExceptionHandler;
 import com.business.project.ms_estoque.model.Produto;
 import com.business.project.ms_estoque.repository.ProdutoRepository;
+import com.business.project.ms_estoque.service.HistoricoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,8 @@ class ProdutoControllerTest {
     @Autowired MockMvc mockMvc;
 
     @MockitoBean ProdutoRepository produtoRepository;
+
+    @MockitoBean HistoricoService historicoService;
 
     ObjectMapper objectMapper;
 
@@ -151,6 +155,7 @@ class ProdutoControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(entradaProdutoRequest)))
                 .andExpect(status().isNotFound());
+        verify(historicoService, never()).registrar(any(Produto.class), any(), any(), any());
     }
 
     @Test
@@ -167,6 +172,12 @@ class ProdutoControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(entradaProdutoRequest)))
                 .andExpect(status().isOk());
+        verify(historicoService, times(1))
+                .registrar(
+                        produtoModel,
+                        TipoMovimentacao.ENTRADA,
+                        entradaProdutoRequest.numeroNotaFiscalEntrada(),
+                        entradaProdutoRequest.quantidade());
     }
 
     @Test
@@ -180,6 +191,7 @@ class ProdutoControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(saidaProdutoRequest)))
                 .andExpect(status().isNotFound());
+        verify(historicoService, never()).registrar(any(Produto.class), any(), any(), any());
     }
 
     @Test
@@ -196,5 +208,11 @@ class ProdutoControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(saidaProdutoRequest)))
                 .andExpect(status().isOk());
+        verify(historicoService, times(1))
+                .registrar(
+                        produtoModel,
+                        TipoMovimentacao.SAIDA,
+                        saidaProdutoRequest.numeroNotaFiscalSaida(),
+                        saidaProdutoRequest.quantidade());
     }
 }

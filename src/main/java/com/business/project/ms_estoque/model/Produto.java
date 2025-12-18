@@ -16,13 +16,17 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "descricao")
     private String descricao;
-    private BigDecimal preco;
-    private Integer quantidade;
 
-    //    public Produto(){}
+    @Column(name = "preco")
+    private BigDecimal preco;
+
+    @Column(name = "quantidade")
+    private Integer quantidade;
 
     public Produto(String descricao, BigDecimal preco) {
         this.descricao = descricao;
