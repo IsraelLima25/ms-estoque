@@ -25,16 +25,13 @@ public class RestExceptionHandler {
     public List<CampoInvalido> handlerArgumentNotValid(MethodArgumentNotValidException exception) {
 
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-        List<CampoInvalido> camposInvalidos = extrairErros(fieldErrors);
-        return camposInvalidos;
+        return extrairErros(fieldErrors);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BusinessException.class})
     public CampoInvalido handlerBusinessException(BusinessException exception) {
-        var campoInvalido =
-                new CampoInvalido("BusinessException_quantidade_produto", exception.getMessage());
-        return campoInvalido;
+        return new CampoInvalido("BusinessException_quantidade_produto", exception.getMessage());
     }
 
     private List<CampoInvalido> extrairErros(List<FieldError> fieldErrors) {

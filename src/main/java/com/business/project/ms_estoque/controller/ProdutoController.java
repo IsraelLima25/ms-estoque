@@ -14,7 +14,6 @@ import com.business.project.ms_estoque.service.HistoricoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +73,7 @@ public class ProdutoController {
                                                 produto.getDescricao(),
                                                 produto.getPreco(),
                                                 produto.getQuantidade()))
-                        .collect(Collectors.toList());
+                        .toList();
         return ResponseEntity.ok(response);
     }
 
