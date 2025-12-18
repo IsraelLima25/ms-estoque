@@ -2,6 +2,7 @@ package com.business.project.ms_estoque.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -12,6 +13,7 @@ import com.business.project.ms_estoque.exception.RestExceptionHandler;
 import com.business.project.ms_estoque.model.Produto;
 import com.business.project.ms_estoque.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import java.util.Optional;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,5 +101,16 @@ class ProdutoControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(requestProduto)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve listar todos os produtos e retornar 200")
+    void deveListarTodosProdutos() throws Exception {
+        when(produtoRepository.findAll())
+                .thenReturn(
+                        List.of(Instancio.create(Produto.class), Instancio.create(Produto.class)));
+        mockMvc.perform(get("/produtos"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
     }
 }

@@ -4,10 +4,13 @@ import com.business.project.ms_estoque.controller.request.AtualizarProdutoReques
 import com.business.project.ms_estoque.controller.request.CriarProdutoRequest;
 import com.business.project.ms_estoque.controller.response.AtualizarProdutoResponse;
 import com.business.project.ms_estoque.controller.response.CriarProdutoResponse;
+import com.business.project.ms_estoque.controller.response.ProdutoResponse;
 import com.business.project.ms_estoque.model.Produto;
 import com.business.project.ms_estoque.repository.ProdutoRepository;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +54,21 @@ public class ProdutoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ProdutoResponse>> listarTodos() {
+        List<Produto> produtos = produtoRepository.findAll();
+        List<ProdutoResponse> response =
+                produtos.stream()
+                        .map(
+                                produto ->
+                                        new ProdutoResponse(
+                                                produto.getId(),
+                                                produto.getDescricao(),
+                                                produto.getPreco()))
+                        .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 }
