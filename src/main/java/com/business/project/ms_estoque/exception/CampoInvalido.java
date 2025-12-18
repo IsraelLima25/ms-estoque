@@ -9,5 +9,4 @@ public class CampoInvalido {
 
     private String campo;
     private String mensagem;
-
 }
