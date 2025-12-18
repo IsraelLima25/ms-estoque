@@ -3,7 +3,7 @@ package com.business.project.ms_estoque.controller;
 import com.business.project.ms_estoque.controller.request.AtualizarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.CriarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.EntradaProdutoRequest;
-import com.business.project.ms_estoque.controller.request.SaidaProdutoReques;
+import com.business.project.ms_estoque.controller.request.SaidaProdutoRequest;
 import com.business.project.ms_estoque.controller.response.AtualizarProdutoResponse;
 import com.business.project.ms_estoque.controller.response.CriarProdutoResponse;
 import com.business.project.ms_estoque.controller.response.ProdutoResponse;
@@ -84,7 +84,10 @@ public class ProdutoController {
             var produto = possivelProduto.get();
             var produtoResponse =
                     new ProdutoResponse(
-                            produto.getId(), produto.getDescricao(), produto.getPreco(), produto.getQuantidade());
+                            produto.getId(),
+                            produto.getDescricao(),
+                            produto.getPreco(),
+                            produto.getQuantidade());
             return ResponseEntity.ok(produtoResponse);
         } else {
             return ResponseEntity.notFound().build();
@@ -93,8 +96,8 @@ public class ProdutoController {
 
     @PostMapping("/{id}/entrada")
     @Transactional
-    public ResponseEntity<Void> darEntrada(@PathVariable("id") Long id,
-                                           @Valid @RequestBody EntradaProdutoRequest request) {
+    public ResponseEntity<Void> darEntrada(
+            @PathVariable("id") Long id, @Valid @RequestBody EntradaProdutoRequest request) {
 
         Optional<Produto> possivelProduto = produtoRepository.findById(id);
         if (possivelProduto.isPresent()) {
@@ -108,8 +111,8 @@ public class ProdutoController {
 
     @PostMapping("/{id}/saida")
     @Transactional
-    public ResponseEntity<Void> darEntrada(@PathVariable("id") Long id,
-                                           @Valid @RequestBody SaidaProdutoReques request) {
+    public ResponseEntity<Void> darEntrada(
+            @PathVariable("id") Long id, @Valid @RequestBody SaidaProdutoRequest request) {
 
         Optional<Produto> possivelProduto = produtoRepository.findById(id);
         if (possivelProduto.isPresent()) {

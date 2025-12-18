@@ -32,7 +32,8 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({BusinessException.class})
     public CampoInvalido handlerBusinessException(BusinessException exception) {
-        var campoInvalido = new CampoInvalido("BusinessException_quantidade_produto", exception.getMessage());
+        var campoInvalido =
+                new CampoInvalido("BusinessException_quantidade_produto", exception.getMessage());
         return campoInvalido;
     }
 
