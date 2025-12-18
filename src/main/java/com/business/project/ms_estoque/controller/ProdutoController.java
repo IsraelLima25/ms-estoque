@@ -2,6 +2,8 @@ package com.business.project.ms_estoque.controller;
 
 import com.business.project.ms_estoque.controller.request.AtualizarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.CriarProdutoRequest;
+import com.business.project.ms_estoque.controller.request.EntradaProdutoRequest;
+import com.business.project.ms_estoque.controller.request.SaidaProdutoReques;
 import com.business.project.ms_estoque.controller.response.AtualizarProdutoResponse;
 import com.business.project.ms_estoque.controller.response.CriarProdutoResponse;
 import com.business.project.ms_estoque.controller.response.ProdutoResponse;
@@ -67,7 +69,8 @@ public class ProdutoController {
                                         new ProdutoResponse(
                                                 produto.getId(),
                                                 produto.getDescricao(),
-                                                produto.getPreco()))
+                                                produto.getPreco(),
+                                                produto.getQuantidade()))
                         .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
@@ -81,8 +84,38 @@ public class ProdutoController {
             var produto = possivelProduto.get();
             var produtoResponse =
                     new ProdutoResponse(
-                            produto.getId(), produto.getDescricao(), produto.getPreco());
+                            produto.getId(), produto.getDescricao(), produto.getPreco(), produto.getQuantidade());
             return ResponseEntity.ok(produtoResponse);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/entrada")
+    @Transactional
+    public ResponseEntity<Void> darEntrada(@PathVariable("id") Long id,
+                                           @Valid @RequestBody EntradaProdutoRequest request) {
+
+        Optional<Produto> possivelProduto = produtoRepository.findById(id);
+        if (possivelProduto.isPresent()) {
+            var produto = possivelProduto.get();
+            produto.darEntrada(request.quantidade());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{id}/saida")
+    @Transactional
+    public ResponseEntity<Void> darEntrada(@PathVariable("id") Long id,
+                                           @Valid @RequestBody SaidaProdutoReques request) {
+
+        Optional<Produto> possivelProduto = produtoRepository.findById(id);
+        if (possivelProduto.isPresent()) {
+            var produto = possivelProduto.get();
+            produto.darSaida(request.quantidade());
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
