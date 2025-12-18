@@ -3,13 +3,16 @@ package com.business.project.ms_estoque.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.business.project.ms_estoque.controller.request.ProdutoRequest;
+import com.business.project.ms_estoque.controller.request.AtualizarProdutoRequest;
+import com.business.project.ms_estoque.controller.request.CriarProdutoRequest;
 import com.business.project.ms_estoque.exception.RestExceptionHandler;
 import com.business.project.ms_estoque.model.Produto;
 import com.business.project.ms_estoque.repository.ProdutoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,7 +49,7 @@ class ProdutoControllerTest {
 
         when(produtoRepository.save(any())).thenReturn(produtoModel);
 
-        var requestProduto = Instancio.create(ProdutoRequest.class);
+        var requestProduto = Instancio.create(CriarProdutoRequest.class);
 
         mockMvc.perform(
                         post("/produtos")
@@ -59,12 +62,42 @@ class ProdutoControllerTest {
     @DisplayName("Não deve criar produto e retornar 400 quando dados inválidos")
     void naoDeveCriarProduto() throws Exception {
 
-        var requestProduto = Instancio.ofBlank(ProdutoRequest.class);
+        var requestProduto = Instancio.ofBlank(CriarProdutoRequest.class);
 
         mockMvc.perform(
                         post("/produtos")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(requestProduto)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Quando produto não encontrado deve retornar 404 ao atualizar")
+    void naoDeveAtualizarProdutoNaoEncontrado() throws Exception {
+
+        when(produtoRepository.findById(1L)).thenReturn(Optional.empty());
+        var requestProduto = Instancio.create(AtualizarProdutoRequest.class);
+        mockMvc.perform(
+                        put("/produtos/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestProduto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve atualizar produto e retornar 200")
+    void deveAtualizarProduto() throws Exception {
+
+        var produtoModel = Instancio.create(Produto.class);
+
+        when(produtoRepository.findById(1L)).thenReturn(Optional.of(produtoModel));
+
+        var requestProduto = Instancio.create(AtualizarProdutoRequest.class);
+
+        mockMvc.perform(
+                        put("/produtos/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestProduto)))
+                .andExpect(status().isOk());
     }
 }

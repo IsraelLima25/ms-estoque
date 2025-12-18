@@ -4,4 +4,4 @@ import java.math.BigDecimal;
 import lombok.Builder;
 
 @Builder
-public record ProdutoResponse(Long id, String descricao, BigDecimal preco) {}
+public record CriarProdutoResponse(Long id, String descricao, BigDecimal preco) {}
