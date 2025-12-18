@@ -111,7 +111,7 @@ public class ProdutoController {
 
     @PostMapping("/{id}/saida")
     @Transactional
-    public ResponseEntity<Void> darEntrada(
+    public ResponseEntity<Void> darSaida(
             @PathVariable("id") Long id, @Valid @RequestBody SaidaProdutoRequest request) {
 
         Optional<Produto> possivelProduto = produtoRepository.findById(id);
