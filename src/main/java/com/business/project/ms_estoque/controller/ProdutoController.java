@@ -1,5 +1,6 @@
 package com.business.project.ms_estoque.controller;
 
+import com.business.project.ms_estoque.controller.enums.TipoMovimentacao;
 import com.business.project.ms_estoque.controller.request.AtualizarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.CriarProdutoRequest;
 import com.business.project.ms_estoque.controller.request.EntradaProdutoRequest;
@@ -9,6 +10,7 @@ import com.business.project.ms_estoque.controller.response.CriarProdutoResponse;
 import com.business.project.ms_estoque.controller.response.ProdutoResponse;
 import com.business.project.ms_estoque.model.Produto;
 import com.business.project.ms_estoque.repository.ProdutoRepository;
+import com.business.project.ms_estoque.service.HistoricoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ProdutoController {
 
     private ProdutoRepository produtoRepository;
+    private HistoricoService historicoService;
 
     @PostMapping
     @Transactional
@@ -103,6 +106,11 @@ public class ProdutoController {
         if (possivelProduto.isPresent()) {
             var produto = possivelProduto.get();
             produto.darEntrada(request.quantidade());
+            historicoService.registrar(
+                    produto,
+                    TipoMovimentacao.ENTRADA,
+                    request.numeroNotaFiscalEntrada(),
+                    request.quantidade());
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
@@ -118,6 +126,11 @@ public class ProdutoController {
         if (possivelProduto.isPresent()) {
             var produto = possivelProduto.get();
             produto.darSaida(request.quantidade());
+            historicoService.registrar(
+                    produto,
+                    TipoMovimentacao.SAIDA,
+                    request.numeroNotaFiscalSaida(),
+                    request.quantidade());
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
