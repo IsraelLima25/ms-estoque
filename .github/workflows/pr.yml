@@ -1,0 +1,12 @@
+name: Maven Test CI
+on:
+  pull_request:
+    branches: ["develop"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Faz o checkout do código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+    
