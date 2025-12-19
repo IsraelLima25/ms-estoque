@@ -22,7 +22,7 @@ jobs:
         run: node --version
       - name: "Definição da versão 20.13.1 do NodeJS"
       - uses: actions/setup-node@v4
-        with:
-          node-version: '20.13.1'
+          with:
+            node-version: '20.13.1'
       - name: "Verificação da versão do NodeJS atual depois da instalação"
         run: node --version
