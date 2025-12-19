@@ -15,6 +15,7 @@ public class SwaggerConfig {
                         new Info()
                                 .title("MS Estoque API")
                                 .version("1.0.0-SNAPSHOT")
-                                .description("Micro serviço para gerenciamento do estoque de produtos"));
+                                .description(
+                                        "Micro serviço para gerenciamento do estoque de produtos"));
     }
 }
