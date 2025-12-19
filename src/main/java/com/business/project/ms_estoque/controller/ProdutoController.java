@@ -25,6 +25,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @AllArgsConstructor
 public class ProdutoController {
 
+    // Comentario adicionado
+
     private ProdutoRepository produtoRepository;
     private HistoricoService historicoService;
 
