@@ -25,7 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @AllArgsConstructor
 public class ProdutoController {
 
-    // Comentario adicionados para teste de commit
+    // Comentario adicionados para teste de commit no github
 
     private ProdutoRepository produtoRepository;
     private HistoricoService historicoService;
