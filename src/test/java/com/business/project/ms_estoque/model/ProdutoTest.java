@@ -74,6 +74,6 @@ class ProdutoTest {
                             produto.darEntrada(0);
                         });
         assertThat(exception.getMessage())
-                .isEqualTo("A quantidade de entrada deve ser maior que zero..");
+                .isEqualTo("A quantidade de entrada deve ser maior que zero.");
     }
 }
